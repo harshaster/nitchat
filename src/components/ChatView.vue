@@ -22,7 +22,7 @@
                 </p>
             </div>
            <div style="position:absolute;bottom: 0;width: 100%;">
-                <fieldset role="group" :disabled="!this.online">
+                <fieldset role="group">
                     <input v-model="this.message" type="text" placeholder="Type a message" ref="messageInp">
                     <button @click="this.send_message"><i class="fas fa-paper-plane"></i></button>
                 </fieldset>
@@ -114,9 +114,11 @@ export default {
             this.$refs.messageInp.focus()
         },
         scrollToBottom(){
-            console.log('called')
             this.$refs.chatBox.scrollTo(0, this.$refs.chatBox.clientHeight + this.$refs.chatBox.scrollHeight)
         }
+    },
+    updated(){
+        this.scrollToBottom()
     },
     created(){
         this.messages = this.conn.messages
@@ -126,7 +128,6 @@ export default {
                 self: false,
                 timestamp : new Date().getTime()
             })
-            this.scrollToBottom()
             this.$emit('playSound', this.conn.peerId)
         })
         if(this.conn.conn.open){
